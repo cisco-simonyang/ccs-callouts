@@ -6,6 +6,8 @@ CLIQR_HOME=/usr/local/osmosix
 . $CLIQR_HOME/service/utils/install_util.sh
 . $CLIQR_HOME/service/utils/os_info_util.sh
 
+sudo agentSendLogMessage "### STARTING VM POST-INIT ###"
+
 touch /home/cliqruser/abc
 
 if [ -d /home/$MY_USER ]; then
