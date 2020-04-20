@@ -38,7 +38,7 @@ else
 	sudo agentSendLogMessage "New user $MY_USER created."
 fi
 
-echo '$MY_USER:1234Qwer' | chpasswd
+#echo '$MY_USER:1234Qwer' | chpasswd
 
 ## Add user to sudoers
 sudo agentSendLogMessage "Adding cliqruser and $MY_USER users to sudoers..."
