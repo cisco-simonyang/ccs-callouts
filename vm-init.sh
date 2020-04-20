@@ -9,15 +9,15 @@
 # Internal Vars	: Initialized within srcipt - $CLIQR_HOME
 
 # Source some cliqr variables and scripts
-#CLIQR_HOME=/usr/local/osmosix
-#. $CLIQR_HOME/etc/.osmosix.sh
-#. $CLIQR_HOME/etc/userenv
-#. $CLIQR_HOME/service/utils/cfgutil.sh
-#. $CLIQR_HOME/service/utils/install_util.sh
-#. $CLIQR_HOME/service/utils/os_info_util.sh
+CLIQR_HOME=/usr/local/osmosix
+. $CLIQR_HOME/etc/.osmosix.sh
+. $CLIQR_HOME/etc/userenv
+. $CLIQR_HOME/service/utils/cfgutil.sh
+. $CLIQR_HOME/service/utils/install_util.sh
+. $CLIQR_HOME/service/utils/os_info_util.sh
 
 # Main
-#sudo agentSendLogMessage "### STARTING VM POST-INIT ###"
+sudo agentSendLogMessage "### STARTING VM POST-INIT ###"
 
 # Hostname
 #hostnamectl set-hostname $HOSTNAME
@@ -25,9 +25,9 @@
 
 ## Create new user
 #sudo agentSendLogMessage "Creating new user..."
-#if [ -d /home/$MY_USER ]; then
-#	sudo agentSendLogMessage "$MY_USER already exists."
-#else
+if [ -d /home/$MY_USER ]; then
+	sudo agentSendLogMessage "$MY_USER already exists."
+else
 	sudo adduser -m -d /home/$MY_USER $MY_USER
 	sudo mkdir /home/$MY_USER/.ssh
 	sudo chown $MY_USER:$MY_USER /home/$MY_USER/.ssh
@@ -36,21 +36,23 @@
 	sudo chown $MY_USER:$MY_USER /home/$MY_USER/.ssh/authorized_keys
 	sudo chmod 600 /home/$MY_USER/.ssh/authorized_keys
 	sudo agentSendLogMessage "New user $MY_USER created."
-#fi
+fi
+
+echo '$MY_USER:1234Qwer' | chpasswd
 
 ## Add user to sudoers
-#sudo agentSendLogMessage "Adding cliqruser and $MY_USER users to sudoers..."
+sudo agentSendLogMessage "Adding cliqruser and $MY_USER users to sudoers..."
 sudo usermod -aG wheel $MY_USER
 sudo usermod -aG wheel cliqruser
 sudo -i bash -c "echo \"$MY_USER  ALL= NOPASSWD: ALL\" >> /etc/sudoers"
 
 ## Insert keys for new user
-#sudo agentSendLogMessage "Adding a new key to cliqruser and $MY_USER authorized_keys..."
+sudo agentSendLogMessage "Adding a new key to cliqruser and $MY_USER authorized_keys..."
 echo "## Dynamically inserted key ##" >> /home/cliqruser/.ssh/authorized_keys
 echo $MY_KEY >> /home/cliqruser/.ssh/authorized_keys
 sudo bash -c "echo \"## Dynamically inserted key ##\" >> /home/$MY_USER/.ssh/authorized_keys"
 sudo bash -c "echo $MY_KEY >> /home/$MY_USER/.ssh/authorized_keys"
 
-#sudo agentSendLogMessage "### VM POST-INIT COMPLETE ###"
+sudo agentSendLogMessage "### VM POST-INIT COMPLETE ###"
 
 exit 0
